@@ -1,6 +1,6 @@
 # flutter_application_2
 
-A new Flutter project.
+A new Flutter project 模版项目.
 
 ## Getting Started
 
