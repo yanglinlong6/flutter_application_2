@@ -38,6 +38,9 @@ dependencies:
   bruno: ^3.4.3
   fluro: ^2.0.5
   scoped_model: ^2.0.0
+  dio: ^5.3.3
+  fluttertoast: ^8.2.4
+  shared_preferences: ^2.2.2
   # todo_flutter:
   #   git:
   #     url: https://github.com/azhon/todo_flutter
