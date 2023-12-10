@@ -7,9 +7,7 @@ import 'package:flutter_application_2/pages/home/tab_search/index.dart';
 // tab内容区
 List<Widget> tabViewList = [
   const TabIndex(),
-  // PageContent(name: "搜索"),
   const TabSearch(),
-  // PageContent(name: "资讯"),
   const TabInfo(),
   const TabProfile(),
 ];

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/config.dart';
@@ -25,20 +27,20 @@ class DioHttp {
   }
   Future<Response<Map<String, dynamic>>> get(String path,
       [Map<String, dynamic>? params, String? token]) async {
-    var options = Options(headers: {'Authorization': token});
+    var options = Options(headers: {'Access-Token': token});
     return await _client!.get(path, queryParameters: params, options: options);
   }
 
   Future<Response<Map<String, dynamic>>> post(String path,
       [Map<String, dynamic>? params, String? token]) async {
-    var options = Options(headers: {'Authorization': token});
+    var options = Options(headers: {'Access-Token': token});
     return await _client!.post(path, data: params, options: options);
   }
 
   Future<Response<Map<String, dynamic>>> postFormData(String path,
       [Map<String, dynamic>? params, String? token]) async {
     var options = Options(
-        contentType: 'multipart/form-data', headers: {'Authorization': token});
+        contentType: 'multipart/form-data', headers: {'Access-Token': token});
     return await _client!.post(path, data: params, options: options);
   }
 }

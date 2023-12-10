@@ -11,9 +11,9 @@ class _TabProfileState extends State<TabProfile> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.deepPurple,
+      color: Colors.white,
       alignment: Alignment.bottomCenter,
-      margin: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(2),
       child: const Text("TabProfile"),
     );
   }
