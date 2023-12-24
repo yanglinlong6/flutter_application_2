@@ -66,7 +66,7 @@ class _MyAptitudeItemState extends State<MyAptitudeItem> {
                   // 在这里执行按钮被点击时的操作
                   print('Button clicked! start _changeStatus');
                   _changeStatus(
-                      widget.orgAptitudeModel.id, myStatus == 0 ? 1 : 0);
+                      widget.orgAptitudeModel.id, myStatus == 0 ? -1 : 0);
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
@@ -83,7 +83,7 @@ class _MyAptitudeItemState extends State<MyAptitudeItem> {
                                   widget.orgAptitudeModel.city.toString());
                               setState(() {
                                 if (myStatus == 0) {
-                                  myStatus = 1;
+                                  myStatus = -1;
                                 } else {
                                   myStatus = 0;
                                 }
