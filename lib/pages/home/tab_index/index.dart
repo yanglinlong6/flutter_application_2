@@ -16,6 +16,9 @@ class TabIndex extends StatefulWidget {
 
 class _TabIndexState extends State<TabIndex> {
   List<OrgMpdel> orgList = [];
+  List<OrgMpdel> filteredOrgList = [];
+  bool isSearching = false;
+  TextEditingController searchController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -51,6 +54,7 @@ class _TabIndexState extends State<TabIndex> {
       print(orgModel);
       setState(() {
         orgList.add(orgModel);
+        filteredOrgList = List.from(orgList);
       });
     });
     print('orgList===');
@@ -61,29 +65,72 @@ class _TabIndexState extends State<TabIndex> {
     getOrgList(null);
   }
 
+  void filterList(String query) {
+    setState(() {
+      filteredOrgList = orgList
+          .where((item) =>
+              item.orgName.toLowerCase().contains(query.toLowerCase()))
+          // .where((item) =>
+          //     item.orgId.toString().toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    });
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('组织机构列表'),
-          backgroundColor: const Color.fromARGB(255, 148, 199, 235),
-        ),
-        body: RefreshIndicator(
-          onRefresh: _refreshData,
-          child: ListView.builder(
-              itemCount: orgList.length,
-              itemBuilder: (context, index) {
-                var stateStr = '';
-                if (orgList[index].state == 1) {
-                  stateStr = '上线';
-                } else {
-                  stateStr = '停用';
+      appBar: AppBar(
+        title: isSearching
+            ? TextField(
+                controller: searchController,
+                onChanged: (value) {
+                  filterList(value);
+                },
+                decoration: const InputDecoration(
+                  hintText: 'Search',
+                  prefixIcon: Icon(Icons.search),
+                ),
+              )
+            : const Text('组织机构列表'),
+        backgroundColor: const Color.fromARGB(255, 148, 199, 235),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(isSearching ? Icons.cancel : Icons.search),
+            onPressed: () {
+              setState(() {
+                isSearching = !isSearching;
+                if (!isSearching) {
+                  searchController.clear();
+                  filterList('');
                 }
-                return ListTile(
-                  title: Text(
-                      "${orgList[index].orgId}--${orgList[index].orgName}--$stateStr"),
-                );
-              }),
-        ));
+              });
+            },
+          ),
+        ],
+      ),
+      body: RefreshIndicator(
+        onRefresh: _refreshData,
+        child: ListView.builder(
+            itemCount: filteredOrgList.length,
+            itemBuilder: (context, index) {
+              var stateStr = '';
+              if (filteredOrgList[index].state == 1) {
+                stateStr = '上线';
+              } else {
+                stateStr = '停用';
+              }
+              return ListTile(
+                title: Text(
+                    "${filteredOrgList[index].orgId}--${filteredOrgList[index].orgName}--$stateStr"),
+              );
+            }),
+      ),
+    );
   }
 }

@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/pages/home/tab_index/index.dart';
-import 'package:flutter_application_2/pages/home/tab_info/index.dart';
-import 'package:flutter_application_2/pages/home/tab_profile/index.dart';
 import 'package:flutter_application_2/pages/home/tab_search/index.dart';
 
 // tab内容区
 List<Widget> tabViewList = [
   const TabIndex(),
   const TabSearch(),
-  const TabInfo(),
-  const TabProfile(),
+  // const TabInfo(),
+  // const TabProfile(),
 ];
 
 // bottomNavigatorItem
 
 List<BottomNavigationBarItem> barItemList = [
-  const BottomNavigationBarItem(label: '首页', icon: Icon(Icons.home)),
-  const BottomNavigationBarItem(label: '搜索', icon: Icon(Icons.search)),
-  const BottomNavigationBarItem(label: '资讯', icon: Icon(Icons.info)),
-  const BottomNavigationBarItem(label: '我的', icon: Icon(Icons.account_circle)),
+  const BottomNavigationBarItem(label: '组织列表', icon: Icon(Icons.home)),
+  const BottomNavigationBarItem(label: '规则列表', icon: Icon(Icons.search)),
+  // const BottomNavigationBarItem(label: '资讯', icon: Icon(Icons.info)),
+  // const BottomNavigationBarItem(label: '我的', icon: Icon(Icons.account_circle)),
 ];
 
 class HomePage extends StatefulWidget {

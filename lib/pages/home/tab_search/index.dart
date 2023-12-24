@@ -15,6 +15,9 @@ class TabSearch extends StatefulWidget {
 
 class _TabSearchState extends State<TabSearch> {
   List<OrgAptitudeModel> orgAptitudeList = [];
+  List<OrgAptitudeModel> filteredOrgAptitudeList = [];
+  bool isSearching = false;
+  TextEditingController searchController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -61,6 +64,7 @@ class _TabSearchState extends State<TabSearch> {
       print(orgApitude);
       setState(() {
         orgAptitudeList.add(orgApitude);
+        filteredOrgAptitudeList = List.from(orgAptitudeList);
       });
     });
     print('orgAptitudeList===');
@@ -83,35 +87,78 @@ class _TabSearchState extends State<TabSearch> {
     getOrgList(null);
   }
 
+  void filterList(String query) {
+    setState(() {
+      filteredOrgAptitudeList = orgAptitudeList
+          .where((item) =>
+              item.orgName.toLowerCase().contains(query.toLowerCase()))
+          // .where((item) =>
+          //     item.orgId.toString().toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    });
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('组织规则列表'),
+          title: isSearching
+              ? TextField(
+                  controller: searchController,
+                  onChanged: (value) {
+                    filterList(value);
+                  },
+                  decoration: const InputDecoration(
+                    hintText: 'Search',
+                    prefixIcon: Icon(Icons.search),
+                  ),
+                )
+              : const Text('组织规则列表'),
           backgroundColor: const Color.fromARGB(255, 148, 199, 235),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(isSearching ? Icons.cancel : Icons.search),
+              onPressed: () {
+                setState(() {
+                  isSearching = !isSearching;
+                  if (!isSearching) {
+                    searchController.clear();
+                    filterList('');
+                  }
+                });
+              },
+            ),
+          ],
         ),
         body: RefreshIndicator(
           onRefresh: _refreshData,
           child: ListView.builder(
-              itemCount: orgAptitudeList.length,
+              itemCount: filteredOrgAptitudeList.length,
               itemBuilder: (context, index) {
                 var stateStr = '';
-                if (orgAptitudeList[index].status == 0) {
+                if (filteredOrgAptitudeList[index].status == 0) {
                   stateStr = '正常';
                 } else {
                   stateStr = '停用';
                 }
                 return ListTile(
                   title: Text(
-                      "${orgAptitudeList[index].orgName}--${orgAptitudeList[index].limitTime}--${orgAptitudeList[index].limitCount}--$stateStr"),
+                      "${filteredOrgAptitudeList[index].orgName}--${filteredOrgAptitudeList[index].limitTime}--${filteredOrgAptitudeList[index].limitCount}--$stateStr"),
                   onLongPress: () => {
                     print("niaho"),
-                    print(orgAptitudeList[index]),
+                    print(filteredOrgAptitudeList[index]),
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => MyAptitudeItem(
-                              orgAptitudeModel: orgAptitudeList[index])),
+                              orgAptitudeModel:
+                                  filteredOrgAptitudeList[index])),
                     )
                   },
                 );
